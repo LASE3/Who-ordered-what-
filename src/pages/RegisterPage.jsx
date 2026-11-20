@@ -3,26 +3,27 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../services/authService.js";
 
+// Show the account registration form.
 export default function RegisterPage() {
-  // State for form data, errors, loading state, and API messages
+  // Store the form values.
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-  // States for validation errors, loading state, and API messages
+  // Store field errors and the loading state.
   const [errors, setErrors] = useState({});
   const [isLoading, setIsloading] = useState(false);
   const navigate = useNavigate();
 
-  // Handle input changes, update form data state
+  // Update the field the user changed.
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Validation function, Checks for name length, email format, password length, and password match
+  // Check the registration fields before sending.
   const validate = () => {
     const newErrors = {};
     const name = formData.name.trim();
@@ -47,7 +48,7 @@ export default function RegisterPage() {
     return newErrors;
   };
 
-  // Handle form submission, validate the form, and set errors or loading state accordingly
+  // Create the account and open the login page.
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLoading) return; // Prevent multiple submissions
@@ -58,7 +59,7 @@ export default function RegisterPage() {
     if (Object.keys(validationErrors).length > 0) return; // If there are validation errors, do not proceed
 
     setIsloading(true);
-    // Call the registerUser function from authService.js, handle success and error cases
+    // Send the registration data.
     try {
       await registerUser({
         name: formData.name,
@@ -69,7 +70,7 @@ export default function RegisterPage() {
         state: { message: "Registration successful! Please log in." },
       });
     } catch (error) {
-      // Handle API errors, set error messages accordingly
+      // Show friendly field errors.
       const apiError = error.response?.data?.error;
       const fieldErrors = {};
 

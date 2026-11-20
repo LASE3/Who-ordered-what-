@@ -7,18 +7,21 @@ export const api = axios.create({
     },
 });
 
+// Send the new account details.
 export async function registerUser({ name, email, password }) {
     const response = await api.post("/register", { name, email, password });
 
     return response.data.data.user;
 }
 
+// Check login details and return the session.
 export async function loginUser({ email, password }) {
     const response = await api.post("/login", { email, password });
 
     return response.data.data;
 }
 
+// Get the user for this token.
 export async function getCurrentUser(token) {
     const response = await api.get("/me",{
         headers: {

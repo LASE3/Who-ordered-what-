@@ -2,8 +2,17 @@ import React, { useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
+// Show the login form and handle login.
 export default function LoginPage() {
   const { state } = useLocation();
+  const from = state?.from;
+
+  const destination =
+    typeof from === "string" &&
+    /^\/(?:orders|restaurants|admin)(?:\/|[?#]|$)/.test(from)
+      ? from
+      : "/orders";
+
   const { status, login, retrySessionCheck } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -14,14 +23,17 @@ export default function LoginPage() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Update the field the user changed.
   function handleChange(e) {
     const { name, value } = e.target;
+    // Keep the other field values.
     setFormData((previoes) => ({
       ...previoes,
       [name]: value,
     }));
   }
 
+  // Check the fields, then try to log in.
   async function handleSubmit(e) {
     e.preventDefault();
     if (isSubmitting) return;
@@ -66,7 +78,7 @@ export default function LoginPage() {
   }
 
   if (status === "checking") {
-    return <p role="status">Cheacking......</p>;
+    return <p role="status">Cheacking....</p>;
   }
 
   if (status === "error") {
@@ -78,7 +90,7 @@ export default function LoginPage() {
   }
 
   if (status === "authenticated") {
-    return <Navigate to="/orders" replace />;
+    return <Navigate to={destination} replace />;
   }
 
   return (

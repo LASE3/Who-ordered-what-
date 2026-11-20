@@ -2,6 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth.js";
 import React from "react";
 
+// Show the shared header and the current page.
 export default function Layout({ onLogout }) {
   const { user, status } = useAuth();
   return (
