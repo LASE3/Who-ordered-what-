@@ -1,10 +1,29 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth.js";
-import React from "react";
+import React, { useState } from "react";
 
 // Show the shared header and the current page.
-export default function Layout({ onLogout }) {
-  const { user, status } = useAuth();
+export default function Layout() {
+  const { user, status, logout } = useAuth();
+  const navigate = useNavigate();
+  const [isLogginOut, setIsLogginOut] = useState(false);
+
+  // Sign out and open the login page.
+  async function handleLogout() {
+    if (isLogginOut) return;
+
+    setIsLogginOut(true);
+
+    const logoutRequest = logout();
+    navigate("/login", { replace: true });
+
+    try {
+      await logoutRequest;
+    } finally {
+      setIsLogginOut(false);
+    }
+  }
+
   return (
     <div>
       <header>
@@ -29,8 +48,12 @@ export default function Layout({ onLogout }) {
 
         <p>{user ? `Welcome, ${user.name}!` : "Please log in."}</p>
 
-        <button onClick={onLogout} disabled={!user || !onLogout}>
-          Logout
+        <button
+          type="button"
+          onClick={handleLogout}
+          disabled={!user || isLogginOut}
+        >
+          {isLogginOut ? "Logging out..." : "Logout"}
         </button>
       </header>
 

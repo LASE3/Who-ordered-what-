@@ -5,7 +5,11 @@ import React, {
   useRef,
   useCallback,
 } from "react";
-import { getCurrentUser, loginUser } from "../services/authService.js";
+import {
+  getCurrentUser,
+  loginUser,
+  logoutUser,
+} from "../services/authService.js";
 
 export const AuthContext = createContext(null);
 
@@ -99,6 +103,26 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // Clear local login and end this API session.
+  async function logout() {
+    const token = sessionStorage.getItem(TOKEN_KEY);
+
+    invalidateSession(token);
+
+    if (!token) return;
+
+    try {
+      await logoutUser(token);
+    } catch (error) {
+      if (error.response?.status === 401) return;
+
+      console.error(
+        "LOGOUT_FAILED",
+        error.response?.data?.error?.code ?? error.code ?? "UNKNOWN_ERROR",
+      );
+    }
+  }
+
   // Check the saved session again.
   function retrySessionCheck() {
     requestVersion.current += 1;
@@ -109,7 +133,14 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, status, login, retrySessionCheck, invalidateSession }}
+      value={{
+        user,
+        status,
+        login,
+        logout,
+        retrySessionCheck,
+        invalidateSession,
+      }}
     >
       {children}
     </AuthContext.Provider>

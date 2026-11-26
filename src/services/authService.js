@@ -23,11 +23,26 @@ export async function loginUser({ email, password }) {
 
 // Get the user for this token.
 export async function getCurrentUser(token) {
-    const response = await api.get("/me",{
+    const response = await api.get("/me", {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     });
 
     return response.data.data.user;
+}
+
+// End the API session for the token.
+export async function logoutUser(token) {
+    const response = await api.post(
+        "/logout",
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    );
+
+    return response.data.data;
 }
