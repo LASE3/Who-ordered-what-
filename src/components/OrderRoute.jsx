@@ -52,7 +52,7 @@ export default function OrderRoute() {
 
         if (problem === "error") {
           console.error(
-            "ORDER_CHECK_FILED",
+            "ORDER_CHECK_FAILED",
             error.response?.data?.error?.code ?? error.code ?? "UNKNOWN_ERROR",
           );
         }

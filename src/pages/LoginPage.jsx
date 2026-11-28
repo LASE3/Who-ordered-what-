@@ -78,7 +78,7 @@ export default function LoginPage() {
   }
 
   if (status === "checking") {
-    return <p role="status">Cheacking....</p>;
+    return <p role="status">Checking....</p>;
   }
 
   if (status === "error") {

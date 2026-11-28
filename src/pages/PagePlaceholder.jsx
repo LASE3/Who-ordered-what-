@@ -29,6 +29,7 @@ export default function PagePlaceholder({ title }) {
             {context?.order?.isOrganizer && (
               <Link to={`/orders/${orderId}/summary`}>Order Summary</Link>
             )}
+            <Link to={`/orders/${encodeURIComponent(orderId)}/menu`}>Menu</Link>
             <Link to={`/orders/${orderId}/billing`}>Billing</Link>
           </nav>
         </>

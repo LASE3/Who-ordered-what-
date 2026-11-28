@@ -8,6 +8,10 @@ import { AuthContext, AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import OrderRoute from "./components/OrderRoute.jsx";
 import OrganizerRoute from "./components/OrganizerRoute.jsx";
+import AdminRestaurantsPage from "./pages/AdminRestaurantsPage.jsx";
+import AdminMenuPage from "./pages/AdminMenuPage.jsx";
+import RestaurantsPage from "./pages/RestaurantsPage.jsx";
+import MenuPage from "./pages/MenuPage.jsx";
 
 // Connect the app pages and route guards.
 export default function App() {
@@ -43,6 +47,7 @@ export default function App() {
                   path="cart"
                   element={<PagePlaceholder title="My Cart Page" />}
                 />
+                <Route path="menu" element={<MenuPage />} />
                 <Route
                   path="billing"
                   element={<PagePlaceholder title="Billing Page" />}
@@ -55,27 +60,20 @@ export default function App() {
                 </Route>
               </Route>
 
-              <Route
-                path="restaurants"
-                element={<PagePlaceholder title="Restaurants Page" />}
-              />
+              <Route path="restaurants" element={<RestaurantsPage />} />
               <Route
                 path="restaurants/:restaurantId/menu"
-                element={<PagePlaceholder title="Restaurant Details Page" />}
+                element={<MenuPage />}
               />
 
               <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
                 <Route
                   path="admin/restaurants"
-                  element={
-                    <PagePlaceholder title="Restaurants Management Page" />
-                  }
+                  element={<AdminRestaurantsPage />}
                 />
                 <Route
                   path="admin/restaurants/:restaurantId/menu"
-                  element={
-                    <PagePlaceholder title="Restaurant Management Page" />
-                  }
+                  element={<AdminMenuPage />}
                 />
               </Route>
             </Route>
